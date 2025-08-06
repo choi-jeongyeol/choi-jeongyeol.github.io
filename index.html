@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CJY - Google Play Store Developer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #FF8E53 0%, #FF6B6B 100%);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .language-selector {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .lang-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            margin-left: 10px;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+        }
+
+        .lang-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .lang-btn.active {
+            background: rgba(255, 255, 255, 0.4);
+            border-color: rgba(255, 255, 255, 0.6);
+        }
+
+        header {
+            text-align: center;
+            padding: 60px 0 40px;
+            color: white;
+        }
+
+        .profile-img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #FFE4B5, #FFD700);
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 80px;
+            color: white;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+
+
+
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 30px;
+        }
+
+        .main-content {
+            background: rgba(255, 248, 220, 0.9);
+            border-radius: 20px;
+            padding: 40px;
+            margin: 20px 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section:last-child {
+            margin-bottom: 0;
+        }
+
+        h2 {
+            color: #FF8E53;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #FF8E53;
+            padding-bottom: 10px;
+        }
+
+        .about-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #4A4A4A;
+        }
+
+        .contact-info {
+            background: rgba(255, 248, 220, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #FF8E53;
+        }
+
+        .email {
+            color: #FF8E53;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .email:hover {
+            text-decoration: underline;
+        }
+
+        .apps-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .app-card {
+            background: rgba(255, 248, 220, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #FF8E53;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .app-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .app-card:hover::before {
+            left: 100%;
+        }
+
+        .app-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .app-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 16px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .app-icon.coloring {
+            background: linear-gradient(135deg, #FF6B6B, #FF8E53, #FFD700);
+        }
+
+
+
+        .app-icon.learning {
+            background: linear-gradient(135deg, #FFD93D, #FF8E53, #FF6B6B);
+        }
+
+
+
+        .app-icon.music {
+            background: linear-gradient(135deg, #FF8E53, #FF6B6B, #FFD700);
+        }
+
+
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .app-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #4A4A4A;
+        }
+
+        .app-description {
+            color: #6B6B6B;
+            line-height: 1.6;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            color: white;
+            opacity: 0.8;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 15px;
+            }
+            
+            .language-selector {
+                top: 10px;
+                right: 10px;
+            }
+            
+            .lang-btn {
+                padding: 6px 12px;
+                font-size: 0.9rem;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .main-content {
+                padding: 30px 20px;
+            }
+            
+            .apps-section {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="language-selector">
+        <button class="lang-btn active" onclick="changeLanguage('en')">EN</button>
+        <button class="lang-btn" onclick="changeLanguage('ko')">한국어</button>
+    </div>
+
+    <div class="container">
+        <header>
+            <div class="profile-img">🎨</div>
+            <h1 data-en="CJY" data-ko="CJY">CJY</h1>
+            <p class="subtitle" data-en="Google Play Store Developer" data-ko="구글플레이스토어 개발자">Google Play Store Developer</p>
+        </header>
+
+        <div class="main-content">
+            <div class="section">
+                <h2 data-en="About Me" data-ko="About Me">About Me</h2>
+                <div class="about-content">
+                    <p data-en="Hello! I'm CJY, a developer active on Google Play Store." data-ko="안녕하세요! 저는 구글플레이스토어에서 활동하고 있는 개발자 CJY입니다.">Hello! I'm CJY, a developer active on Google Play Store.</p>
+                    <p data-en="I specialize in developing educational applications for young children, creating fun and educational apps that help children learn and play." data-ko="주로 유아용 애플리케이션 개발에 특화되어 있으며, 아이들의 학습과 놀이를 돕는 교육적이고 재미있는 앱들을 만들고 있습니다.">I specialize in developing educational applications for young children, creating fun and educational apps that help children learn and play.</p>
+                    <p data-en="My goal is to provide quality content that helps children's growth and development." data-ko="아이들의 성장과 발달에 도움이 되는 양질의 콘텐츠를 제공하는 것을 목표로 하고 있습니다.">My goal is to provide quality content that helps children's growth and development.</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 data-en="Contact" data-ko="Contact">Contact</h2>
+                <div class="contact-info">
+                    <p><strong data-en="Email:" data-ko="이메일:">Email:</strong> <a href="mailto:java0528@gmail.com" class="email">java0528@gmail.com</a></p>
+                    <p data-en="Feel free to contact me for project inquiries or collaboration proposals!" data-ko="프로젝트 문의나 협업 제안은 언제든지 연락주세요!">Feel free to contact me for project inquiries or collaboration proposals!</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 data-en="My Apps" data-ko="My Apps">My Apps</h2>
+                <div class="apps-section">
+                    <div class="app-card">
+                        <div class="app-icon coloring">🎨</div>
+                        <div class="app-title" data-en="Kids Coloring App" data-ko="유아용 색칠놀이">Kids Coloring App</div>
+                        <div class="app-description" data-en="A coloring game app where children can express their creativity." data-ko="아이들이 창의력을 발휘할 수 있는 색칠 게임 앱입니다.">A coloring game app where children can express their creativity.</div>
+                    </div>
+                    <div class="app-card">
+                        <div class="app-icon learning">🔢</div>
+                        <div class="app-title" data-en="Number Learning" data-ko="숫자 학습">Number Learning</div>
+                        <div class="app-description" data-en="An educational app where children can learn numbers through fun games." data-ko="재미있는 게임을 통해 숫자를 배울 수 있는 교육 앱입니다.">An educational app where children can learn numbers through fun games.</div>
+                    </div>
+                    <div class="app-card">
+                        <div class="app-icon music">🎵</div>
+                        <div class="app-title" data-en="Children's Songs Collection" data-ko="동요 모음">Children's Songs Collection</div>
+                        <div class="app-description" data-en="A music app featuring children's favorite nursery rhymes." data-ko="아이들이 좋아하는 동요들을 모아놓은 음악 앱입니다.">A music app featuring children's favorite nursery rhymes.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p data-en="&copy; 2025 CJY. All rights reserved." data-ko="&copy; 2025 CJY. All rights reserved.">&copy; 2024 CJY. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeLanguage(lang) {
+            // Update language buttons
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Update HTML lang attribute
+            document.documentElement.lang = lang === 'ko' ? 'ko' : 'en';
+
+            // Update all elements with data attributes
+            document.querySelectorAll('[data-' + lang + ']').forEach(element => {
+                element.textContent = element.getAttribute('data-' + lang);
+            });
+
+            // Update title
+            const title = lang === 'ko' ? 'CJY - 구글플레이스토어 개발자' : 'CJY - Google Play Store Developer';
+            document.title = title;
+        }
+    </script>
+</body>
+</html> 
